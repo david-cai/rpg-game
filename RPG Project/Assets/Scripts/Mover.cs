@@ -6,17 +6,13 @@ using UnityEngine.AI;
 public class Mover : MonoBehaviour {
 
     [SerializeField] Transform target;
-    
-    // Start is called before the first frame update
-    void Start() {
-        
-    }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
             MoveToCursor();
         }
+        UpdateAnimator();
     }
 
     private void MoveToCursor() {
@@ -26,5 +22,12 @@ public class Mover : MonoBehaviour {
         if (hasHit) {
             GetComponent<NavMeshAgent>().destination = hit.point;
         }
+    }
+
+    private void UpdateAnimator() {
+        Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        float speed = localVelocity.z;
+        GetComponent<Animator>().SetFloat("forwardSpeed", speed);
     }
 }
